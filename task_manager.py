@@ -4,6 +4,7 @@ from datetime import datetime
 TASKS_FILE = "tasks.txt"
 USERS_FILE = "users.txt"
 
+# function reads users from file
 def read_users():
     users = {}
     with open(USERS_FILE, 'r') as file:
@@ -12,11 +13,13 @@ def read_users():
             users[username] = password
     return users
 
+# function writes users to file
 def write_users(users):
     with open(USERS_FILE, 'w') as file:
         for username, password in users.items():
             file.write(f"{username}, {password}\n")
 
+# function reads tasks from file
 def read_tasks():
     tasks = []
     with open(TASKS_FILE, 'r') as file:
@@ -25,10 +28,12 @@ def read_tasks():
             tasks.append(task_data)
     return tasks
 
+# function writes tasks from file
 def write_task(task):
     with open(TASKS_FILE, 'a') as file:
         file.write(', '.join(task) + '\n')
 
+# function for user's login
 def login():
     users = read_users()
     while True:
@@ -41,6 +46,7 @@ def login():
         else:
             print("Invalid username or password. Please try again.")
 
+# function adds a new user
 def add_user():
     new_username = input("Enter a new username: ")
     users = read_users()
@@ -58,40 +64,53 @@ def add_user():
     write_users(users)
     print("User added successfully!")
 
+# function adds a new task
 def add_task(username):
+    # task details
     title = input("Enter the title of the task: ")
     description = input("Enter the description of the task: ")
     due_date = input("Enter the due date of the task (format: DD MMM YYYY): ")
 
     assigned_date = datetime.now().strftime('%d %b %Y')
 
+    # adds task to txt
     with open(TASKS_FILE, 'a') as file:
         file.write(f"{username}, {title}, {description}, {assigned_date}, {due_date}, No\n")
     print("Task added successfully!")
 
+
+# Function to view all tasks
 def view_all_tasks():
     tasks = read_tasks()
     for task in tasks:
         print(", ".join(task))
 
+
+# Function to view all of user's tasks
 def view_my_tasks(username):
     tasks = read_tasks()
     for task in tasks:
         if task[0] == username:
             print(", ".join(task))
 
+
+# Function to view number of tasks and users
 def display_statistics():
     users = read_users()
     tasks = read_tasks()
     print(f"Total number of users: {len(users)}")
     print(f"Total number of tasks: {len(tasks)}")
 
+
+# Function handles and returns user login
 def handle_login():
     while True:
         username = login()
         if username:
             return username
 
+
+# Function fot the main menu
 def main_menu(username):
     while True:
         print("\nMain Menu:")
@@ -120,6 +139,7 @@ def main_menu(username):
         else:
             print("You have entered an invalid input. Please try again")
 
+# starting point
 def main():
     logged_in_user = handle_login()
     main_menu(logged_in_user)
